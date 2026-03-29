@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Высотность зданий СПб | МТС</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, 'Segoe UI', Arial, sans-serif; background: #0f0f1a; color: #fff; }
+
+  #map { position: fixed; top: 0; left: 280px; right: 0; bottom: 0; z-index: 1; }
+
+  .sidebar {
+    position: fixed; top: 0; left: 0; width: 280px; height: 100vh;
+    background: #1a1a2e; overflow-y: auto; z-index: 10;
+    display: flex; flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 20px 16px 12px;
+    background: #E30611;
+    flex-shrink: 0;
+  }
+  .sidebar-header h1 { font-size: 16px; font-weight: 800; letter-spacing: 0.5px; }
+  .sidebar-header p { font-size: 11px; opacity: 0.8; margin-top: 4px; }
+
+  .sidebar-stats {
+    padding: 12px 16px;
+    background: #16213e;
+    font-size: 12px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .sidebar-stats .stat { display: flex; justify-content: space-between; margin: 3px 0; }
+  .sidebar-stats .val { color: #E30611; font-weight: 700; }
+
+  .sidebar-section { padding: 12px 16px; flex-shrink: 0; }
+  .sidebar-section h3 { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+
+  .district-btn {
+    display: block; width: 100%; padding: 10px 12px; margin-bottom: 4px;
+    background: #16213e; border: 1px solid #2a2a4a; border-radius: 6px;
+    color: #ccc; font-size: 13px; cursor: pointer; text-align: left;
+    transition: all 0.15s;
+  }
+  .district-btn:hover { background: #1f2f50; border-color: #E30611; color: #fff; }
+  .district-btn.active { background: #E30611; border-color: #E30611; color: #fff; font-weight: 600; }
+  .district-btn .sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .district-btn.active .sub { color: rgba(255,255,255,0.7); }
+
+  .legend {
+    padding: 12px 16px;
+    flex-shrink: 0;
+    border-top: 1px solid #2a2a4a;
+  }
+  .legend h3 { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .legend-item { display: flex; align-items: center; margin: 4px 0; font-size: 12px; }
+  .legend-color { width: 16px; height: 12px; border-radius: 2px; margin-right: 8px; flex-shrink: 0; }
+
+  .loader {
+    position: fixed; top: 50%; left: calc(50% + 140px); transform: translate(-50%, -50%);
+    background: rgba(26,26,46,0.95); padding: 20px 30px; border-radius: 10px;
+    font-size: 14px; z-index: 100; display: none;
+  }
+  .loader.show { display: block; }
+
+  .info-panel {
+    position: fixed; bottom: 20px; right: 20px; z-index: 100;
+    background: rgba(26,26,46,0.95); padding: 12px 16px; border-radius: 8px;
+    font-size: 12px; max-width: 250px; display: none;
+  }
+  .info-panel.show { display: block; }
+  .info-panel .h { font-size: 24px; font-weight: 800; color: #E30611; }
+
+  @media (max-width: 768px) {
+    .sidebar { width: 100%; height: auto; max-height: 40vh; position: relative; }
+    #map { position: relative; left: 0; height: 60vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h1>ВЫШЕ КРЫШИ</h1>
+    <p>Единая модель высотности зданий СПб</p>
+    <p style="margin-top:2px; font-size:10px; opacity:0.6;">Changellenge Cup IT 2026 | МТС</p>
+  </div>
+
+  <div class="sidebar-stats" id="stats">
+    <div class="stat"><span>Всего зданий</span><span class="val">196,807</span></div>
+    <div class="stat"><span>С реальной высотой</span><span class="val">82%</span></div>
+    <div class="stat"><span>ML-предсказанных</span><span class="val">36,057</span></div>
+    <div class="stat"><span>Выбран район</span><span class="val" id="stat-district">—</span></div>
+    <div class="stat"><span>Зданий на карте</span><span class="val" id="stat-count">—</span></div>
+  </div>
+
+  <div class="sidebar-section">
+    <h3>Районы</h3>
+    <div id="district-list"></div>
+  </div>
+
+  <div class="legend">
+    <h3>Высота зданий</h3>
+    <div class="legend-item"><div class="legend-color" style="background:#2b83ba"></div> &le; 5 м</div>
+    <div class="legend-item"><div class="legend-color" style="background:#abdda4"></div> 5 &ndash; 15 м</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ffffbf"></div> 15 &ndash; 30 м</div>
+    <div class="legend-item"><div class="legend-color" style="background:#fdae61"></div> 30 &ndash; 50 м</div>
+    <div class="legend-item"><div class="legend-color" style="background:#d7191c"></div> &gt; 50 м</div>
+    <div style="margin-top:8px; border-top:1px solid #2a2a4a; padding-top:8px;">
+      <div class="legend-item"><div class="legend-color" style="background:transparent; border:2px solid #888;"></div> Контур = полигон здания</div>
+    </div>
+  </div>
+</div>
+
+<div id="map"></div>
+<div class="loader" id="loader">Загрузка...</div>
+<div class="info-panel" id="info"></div>
+
+<script>
+const map = L.map('map', {zoomControl: false}).setView([59.94, 30.32], 12);
+
+L.control.zoom({position: 'topright'}).addTo(map);
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OSM &copy; CARTO',
+  maxZoom: 19
+}).addTo(map);
+
+let currentLayer = null;
+let districts = [];
+
+function heightColor(h) {
+  if (h <= 5) return '#2b83ba';
+  if (h <= 15) return '#abdda4';
+  if (h <= 30) return '#ffffbf';
+  if (h <= 50) return '#fdae61';
+  return '#d7191c';
+}
+
+function style(feature) {
+  const h = feature.properties.height || 0;
+  return {
+    fillColor: heightColor(h),
+    color: '#555',
+    weight: 0.8,
+    fillOpacity: 0.7,
+  };
+}
+
+function onEachFeature(feature, layer) {
+  layer.on('mouseover', function(e) {
+    this.setStyle({weight: 2, color: '#fff'});
+    const p = feature.properties;
+    const info = document.getElementById('info');
+    info.innerHTML = `
+      <div class="h">${(p.height || 0).toFixed(1)} м</div>
+      <div style="margin-top:4px;">
+        Источник: <b>${p.height_source === 'ml_predicted' ? 'ML' : 'Источник Б'}</b><br>
+        Тип: ${p.match_type || '—'}
+      </div>
+    `;
+    info.classList.add('show');
+  });
+  layer.on('mouseout', function(e) {
+    if (currentLayer) currentLayer.resetStyle(this);
+    document.getElementById('info').classList.remove('show');
+  });
+}
+
+async function loadDistrict(d) {
+  const loader = document.getElementById('loader');
+  loader.classList.add('show');
+
+  // Remove old
+  if (currentLayer) { map.removeLayer(currentLayer); currentLayer = null; }
+
+  // Update buttons
+  document.querySelectorAll('.district-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + d.id).classList.add('active');
+
+  try {
+    const resp = await fetch('data/' + d.id + '.geojson');
+    const geojson = await resp.json();
+
+    currentLayer = L.geoJSON(geojson, { style, onEachFeature }).addTo(map);
+    map.flyTo([d.lat, d.lon], 16, {duration: 1});
+
+    document.getElementById('stat-district').textContent = d.name;
+    document.getElementById('stat-count').textContent = geojson.features.length.toLocaleString();
+  } catch(e) {
+    console.error(e);
+  }
+
+  loader.classList.remove('show');
+}
+
+// Load districts index
+fetch('data/districts.json')
+  .then(r => r.json())
+  .then(data => {
+    districts = data;
+    const list = document.getElementById('district-list');
+    data.forEach(d => {
+      const btn = document.createElement('button');
+      btn.className = 'district-btn';
+      btn.id = 'btn-' + d.id;
+      btn.innerHTML = d.name;
+      btn.onclick = () => loadDistrict(d);
+      list.appendChild(btn);
+    });
+    // Load first
+    loadDistrict(data[0]);
+  });
+</script>
+
+</body>
+</html>
