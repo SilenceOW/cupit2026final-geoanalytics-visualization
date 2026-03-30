@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["primorsky"]={
 "type": "FeatureCollection",
 "name": "primorsky",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -388,3 +388,4 @@
 { "type": "Feature", "properties": { "height": 4.5, "match_type": "only_b", "height_source": "source_b", "tag_main": null, "area_m2": 731, "zone_type": "urban", "macro_h": 20.0, "small_cell_h": 10.0, "pico_h": 12.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.25529, 59.990629 ], [ 30.254633, 59.990624 ], [ 30.254628, 59.990803 ], [ 30.255285, 59.990808 ], [ 30.25529, 59.990629 ] ] ] } }
 ]
 }
+;

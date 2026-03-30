@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["nevsky"]={
 "type": "FeatureCollection",
 "name": "nevsky",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -355,3 +355,4 @@
 { "type": "Feature", "properties": { "height": 4.5, "match_type": "only_b", "height_source": "source_b", "tag_main": null, "area_m2": 63, "zone_type": "urban", "macro_h": 20.0, "small_cell_h": 10.0, "pico_h": 12.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.457069, 59.895966 ], [ 30.45685, 59.895973 ], [ 30.456855, 59.896019 ], [ 30.457074, 59.896012 ], [ 30.457069, 59.895966 ] ] ] } }
 ]
 }
+;

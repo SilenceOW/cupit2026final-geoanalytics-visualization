@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["petrogradskaya"]={
 "type": "FeatureCollection",
 "name": "petrogradskaya",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -744,3 +744,4 @@
 { "type": "Feature", "properties": { "height": 4.5, "match_type": "matched", "height_source": "source_b", "tag_main": "постройка", "area_m2": 36, "zone_type": "urban", "macro_h": 20.0, "small_cell_h": 10.0, "pico_h": 12.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.315696, 59.970689 ], [ 30.315887, 59.970683 ], [ 30.315883, 59.970653 ], [ 30.315692, 59.970659 ], [ 30.315696, 59.970689 ] ] ] } }
 ]
 }
+;

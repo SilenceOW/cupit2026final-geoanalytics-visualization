@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["kalininsky"]={
 "type": "FeatureCollection",
 "name": "kalininsky",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -450,3 +450,4 @@
 { "type": "Feature", "properties": { "height": 8.0, "match_type": "only_b", "height_source": "source_b", "tag_main": null, "area_m2": 145, "zone_type": "highrise", "macro_h": 30.0, "small_cell_h": 16.0, "pico_h": 18.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.386075, 59.963582 ], [ 30.386057, 59.963732 ], [ 30.38621, 59.963736 ], [ 30.386231, 59.963586 ], [ 30.386075, 59.963582 ] ] ] } }
 ]
 }
+;

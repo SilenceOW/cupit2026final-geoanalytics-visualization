@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["moskovskiy"]={
 "type": "FeatureCollection",
 "name": "moskovskiy",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -546,3 +546,4 @@
 { "type": "Feature", "properties": { "height": 4.0, "match_type": "matched", "height_source": "source_b", "tag_main": "офисы", "area_m2": 383, "zone_type": "urban", "macro_h": 20.0, "small_cell_h": 10.0, "pico_h": 12.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.326068, 59.892637 ], [ 30.326066, 59.892566 ], [ 30.326063, 59.892404 ], [ 30.326059, 59.892278 ], [ 30.325889, 59.892272 ], [ 30.325899, 59.892637 ], [ 30.326068, 59.892637 ] ] ] } }
 ]
 }
+;

@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["south"]={
 "type": "FeatureCollection",
 "name": "south",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -299,3 +299,4 @@
 { "type": "Feature", "properties": { "height": 4.5, "match_type": "only_b", "height_source": "source_b", "tag_main": null, "area_m2": 22, "zone_type": "highrise", "macro_h": 30.0, "small_cell_h": 16.0, "pico_h": 18.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.38682, 59.834563 ], [ 30.386764, 59.834609 ], [ 30.386821, 59.834626 ], [ 30.386877, 59.83458 ], [ 30.38682, 59.834563 ] ] ] } }
 ]
 }
+;

@@ -1,4 +1,4 @@
-{
+window.GEO=window.GEO||{};window.GEO["vasilievsky"]={
 "type": "FeatureCollection",
 "name": "vasilievsky",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -848,3 +848,4 @@
 { "type": "Feature", "properties": { "height": 4.5, "match_type": "only_b", "height_source": "source_b", "tag_main": null, "area_m2": 174, "zone_type": "highrise", "macro_h": 30.0, "small_cell_h": 16.0, "pico_h": 18.0, "pico_needed": true }, "geometry": { "type": "Polygon", "coordinates": [ [ [ 30.275883, 59.940746 ], [ 30.275804, 59.940817 ], [ 30.276101, 59.940902 ], [ 30.276181, 59.940831 ], [ 30.275883, 59.940746 ] ] ] } }
 ]
 }
+;
